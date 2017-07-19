@@ -1,3 +1,4 @@
+[![MyAnimeList.com](https://myanimelist.cdn-dena.com/images/mal-logo-xsmall.png)](https://myanimelist.com)
 
 [![Latest Stable Version](https://img.shields.io/packagist/v/anime-db/my-anime-list-browser-bundle.svg?maxAge=3600&label=stable)](https://packagist.org/packages/anime-db/my-anime-list-browser-bundle)
 [![Total Downloads](https://img.shields.io/packagist/dt/anime-db/my-anime-list-browser-bundle.svg?maxAge=3600)](https://packagist.org/packages/anime-db/my-anime-list-browser-bundle)
