@@ -1,0 +1,8 @@
+services:
+    anime_db.my_anime_list.browser:
+        class: AnimeDb\Bundle\MyAnimeListBrowserBundle\Service\Browser
+        arguments: [ '@anime_db.my_anime_list.browser.client', ~, ~ ]
+
+    anime_db.my_anime_list.browser.client:
+        class: GuzzleHttp\Client
+        public: false
