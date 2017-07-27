@@ -69,13 +69,13 @@ class AnimeDbMyAnimeListBrowserExtensionTest extends \PHPUnit_Framework_TestCase
         $browser
             ->expects($this->at(0))
             ->method('replaceArgument')
-            ->with(1, $host)
+            ->with(2, $host)
             ->will($this->returnSelf())
         ;
         $browser
             ->expects($this->at(1))
             ->method('replaceArgument')
-            ->with(2, $client)
+            ->with(3, $client)
             ->will($this->returnSelf())
         ;
 

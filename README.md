@@ -64,6 +64,23 @@ Get info for anime [Cowboy Bebop](https://myanimelist.net/anime/1/Cowboy_Bebop):
 $content = $browser->get('/anime/1');
 ```
 
+Catch exceptions
+
+```php
+use AnimeDb\Bundle\MyAnimeListBrowserBundle\Exception\BannedException;
+use AnimeDb\Bundle\MyAnimeListBrowserBundle\Exception\NotFoundException;
+
+try {
+    $content = $browser->get('/anime/1');
+} catch (BannedException $e) {
+    // you are banned
+} catch (NotFoundException $e) {
+    // page not found
+} catch (\Exception $e) {
+    // other exceptions
+}
+```
+
 You can customize request options. See [Guzzle Documentation](http://docs.guzzlephp.org/en/stable/request-options.html).
 
 License

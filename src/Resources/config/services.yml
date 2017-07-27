@@ -1,7 +1,15 @@
 services:
     anime_db.my_anime_list.browser:
         class: AnimeDb\Bundle\MyAnimeListBrowserBundle\Service\Browser
-        arguments: [ '@anime_db.my_anime_list.browser.client', ~, ~ ]
+        arguments:
+            - '@anime_db.my_anime_list.browser.client'
+            - '@anime_db.my_anime_list.browser.error_detector'
+            - ~
+            - ~
+
+    anime_db.my_anime_list.browser.error_detector:
+        class: AnimeDb\Bundle\MyAnimeListBrowserBundle\Service\ErrorDetector
+        public: false
 
     anime_db.my_anime_list.browser.client:
         class: GuzzleHttp\Client

@@ -11,9 +11,9 @@
 namespace AnimeDb\Bundle\MyAnimeListBrowserBundle\Tests\Service;
 
 use AnimeDb\Bundle\MyAnimeListBrowserBundle\Service\Browser;
+use AnimeDb\Bundle\MyAnimeListBrowserBundle\Service\ErrorDetector;
 use GuzzleHttp\Client as HttpClient;
-use Psr\Http\Message\MessageInterface;
-use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\ResponseInterface;
 
 class BrowserTest extends \PHPUnit_Framework_TestCase
 {
@@ -33,14 +33,14 @@ class BrowserTest extends \PHPUnit_Framework_TestCase
     private $client;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|StreamInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|ResponseInterface
      */
-    private $stream;
+    private $response;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|MessageInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|ErrorDetector
      */
-    private $message;
+    private $detector;
 
     /**
      * @var Browser
@@ -50,10 +50,10 @@ class BrowserTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->client = $this->getMock(HttpClient::class);
-        $this->stream = $this->getMock(StreamInterface::class);
-        $this->message = $this->getMock(MessageInterface::class);
+        $this->response = $this->getMock(ResponseInterface::class);
+        $this->detector = $this->getMock(ErrorDetector::class);
 
-        $this->browser = new Browser($this->client, $this->host, $this->app_client);
+        $this->browser = new Browser($this->client, $this->detector, $this->host, $this->app_client);
     }
 
     /**
@@ -89,23 +89,18 @@ class BrowserTest extends \PHPUnit_Framework_TestCase
 
         $content = 'Hello, world!';
 
-        $this->stream
+        $this->detector
             ->expects($this->once())
-            ->method('getContents')
+            ->method('detect')
+            ->with($this->response)
             ->will($this->returnValue($content))
-        ;
-
-        $this->message
-            ->expects($this->once())
-            ->method('getBody')
-            ->will($this->returnValue($this->stream))
         ;
 
         $this->client
             ->expects($this->once())
             ->method('request')
             ->with('GET', $this->host.$path, $options)
-            ->will($this->returnValue($this->message))
+            ->will($this->returnValue($this->response))
         ;
 
         $this->assertEquals($content, $this->browser->get($path, $params));

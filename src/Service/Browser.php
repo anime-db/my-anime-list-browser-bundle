@@ -10,14 +10,19 @@
 
 namespace AnimeDb\Bundle\MyAnimeListBrowserBundle\Service;
 
-use GuzzleHttp\Client;
+use GuzzleHttp\Client as HttpClient;
 
 class Browser
 {
     /**
-     * @var Client
+     * @var HttpClient
      */
     private $client;
+
+    /**
+     * @var ErrorDetector
+     */
+    private $detector;
 
     /**
      * @var string
@@ -30,13 +35,15 @@ class Browser
     private $app_client;
 
     /**
-     * @param Client $client
-     * @param string $host
-     * @param string $app_client
+     * @param HttpClient    $client
+     * @param ErrorDetector $detector
+     * @param string        $host
+     * @param string        $app_client
      */
-    public function __construct(Client $client, $host, $app_client)
+    public function __construct(HttpClient $client, ErrorDetector $detector, $host, $app_client)
     {
         $this->client = $client;
+        $this->detector = $detector;
         $this->host = $host;
         $this->app_client = $app_client;
     }
@@ -58,8 +65,6 @@ class Browser
 
         $response = $this->client->request('GET', $this->host.$path, $options);
 
-        $content = $response->getBody()->getContents();
-
-        return $content;
+        return $this->detector->detect($response);
     }
 }
