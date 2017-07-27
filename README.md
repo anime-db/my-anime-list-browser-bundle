@@ -52,11 +52,19 @@ anime_db_my_anime_list_browser:
 Usage
 -----
 
+First get browser
+
+```php
+$browser = $this->get('anime_db.my_anime_list.browser');
+```
+
 Get info for anime [Cowboy Bebop](https://myanimelist.net/anime/1/Cowboy_Bebop):
 
 ```php
-$content = $this->get('anime_db.my_anime_list.browser')->get('/anime/1');
+$content = $browser->get('/anime/1');
 ```
+
+You can customize request options. See [Guzzle Documentation](http://docs.guzzlephp.org/en/stable/request-options.html).
 
 License
 -------
