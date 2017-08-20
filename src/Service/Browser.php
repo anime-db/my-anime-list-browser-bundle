@@ -63,7 +63,11 @@ class Browser
             );
         }
 
-        $response = $this->client->request('GET', $this->host.$path, $options);
+        try {
+            $response = $this->client->request('GET', $this->host.$path, $options);
+        } catch (\Exception $e) {
+            throw $this->detector->wrap($e);
+        }
 
         return $this->detector->detect($response);
     }

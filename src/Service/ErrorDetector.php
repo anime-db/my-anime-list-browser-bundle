@@ -11,11 +11,30 @@
 namespace AnimeDb\Bundle\MyAnimeListBrowserBundle\Service;
 
 use AnimeDb\Bundle\MyAnimeListBrowserBundle\Exception\BannedException;
+use AnimeDb\Bundle\MyAnimeListBrowserBundle\Exception\ErrorException;
 use AnimeDb\Bundle\MyAnimeListBrowserBundle\Exception\NotFoundException;
+use GuzzleHttp\Exception\ClientException;
 use Psr\Http\Message\ResponseInterface;
 
 class ErrorDetector
 {
+    /**
+     * @param \Exception $exception
+     *
+     * @return ErrorException|NotFoundException
+     */
+    public function wrap(\Exception $exception)
+    {
+        if ($exception instanceof ClientException &&
+            $exception->getResponse() instanceof ResponseInterface &&
+            $exception->getResponse()->getStatusCode() == 404
+        ) {
+            return NotFoundException::page();
+        }
+
+        return ErrorException::wrap($exception);
+    }
+
     /**
      * @param ResponseInterface $response
      *

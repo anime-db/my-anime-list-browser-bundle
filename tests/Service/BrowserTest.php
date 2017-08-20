@@ -10,6 +10,7 @@
 
 namespace AnimeDb\Bundle\MyAnimeListBrowserBundle\Tests\Service;
 
+use AnimeDb\Bundle\MyAnimeListBrowserBundle\Exception\ErrorException;
 use AnimeDb\Bundle\MyAnimeListBrowserBundle\Service\Browser;
 use AnimeDb\Bundle\MyAnimeListBrowserBundle\Service\ErrorDetector;
 use GuzzleHttp\Client as HttpClient;
@@ -104,5 +105,29 @@ class BrowserTest extends \PHPUnit_Framework_TestCase
         ;
 
         $this->assertEquals($content, $this->browser->get($path, $params));
+    }
+
+    /**
+     * @expectedException \AnimeDb\Bundle\MyAnimeListBrowserBundle\Exception\ErrorException
+     */
+    public function testException()
+    {
+        $exception = new \Exception();
+        $wrap = ErrorException::wrap($exception);
+
+        $this->detector
+            ->expects($this->once())
+            ->method('wrap')
+            ->with($exception)
+            ->will($this->returnValue($wrap))
+        ;
+
+        $this->client
+            ->expects($this->once())
+            ->method('request')
+            ->will($this->throwException($exception))
+        ;
+
+        $this->browser->get('');
     }
 }
